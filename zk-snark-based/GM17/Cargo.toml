@@ -1,0 +1,88 @@
+[package]
+name = "ark-pcd"
+version = "0.1.0"
+authors = [ "arkworks contributors" ]
+description = "A library for proof-carrying data"
+repository = "https://github.com/arkworks-rs/pcd"
+keywords = ["zero knowledge", "cryptography", "proof-carrying data", "PCD"]
+categories = ["cryptography"]
+include = ["Cargo.toml", "src", "README.md", "LICENSE-APACHE", "LICENSE-MIT"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+
+################################# Dependencies ################################
+
+[dependencies]
+ark-serialize = { version = "0.4.0", default-features = false, features = [ "derive" ] }
+ark-ff = { version = "0.4.0", default-features = false }
+ark-ec = { version = "0.4.0", default-features = false }
+ark-poly = { version = "0.4.0", default-features = false }
+ark-std = { version = "0.4.0", default-features = false }
+ark-relations = { version = "0.4.0", default-features = false }
+#ark-crypto-primitives = { version = "0.4.0", default-features = false, features = ["snark", "crh", "sponge", "r1cs"] }
+ark-crypto-primitives = { path = "crypto-primitives", default-features = false, features = ["snark", "crh", "sponge", "r1cs"] }
+#ark-crypto-primitives = { git = "https://github.com/arkworks-rs/crypto-primitives.git", branch = "main", features = ["snark", "crh", "sponge", "r1cs"] }
+
+ark-r1cs-std = { version = "0.4.0", default-features = false, optional = true }
+
+#ark-nonnative-field = { git = "https://github.com/arkworks-rs/nonnative", default-features = false }
+#ark-snark = { git = "https://github.com/arkworks-rs/snark", default-features = false }
+ark-nonnative-field = { version = "0.3.0", default-features = false }
+ark-snark = { version = "0.4.0", default-features = false }
+
+ark-ed-on-mnt4-753 = { version = "0.4.0", default-features = false }
+ark-ed-on-mnt4-298 = { version = "0.4.0", default-features = false }
+ark-ed-on-bls12-381 = { version = "0.4.0", default-features = false }
+ark-mnt4-298 = { version = "0.4.0", default-features = false, features = ["r1cs", "curve"] }
+ark-mnt6-298 = { version = "0.4.0", default-features = false, features = ["r1cs"] }
+ark-mnt4-753 = { version = "0.4.0", default-features = false, features = ["r1cs", "curve"] }
+ark-mnt6-753 = { version = "0.4.0", default-features = false, features = ["r1cs"] }
+
+
+
+rand_chacha = { version = "0.2.1", default-features = false }
+derivative = { version = "2.0", features = ["use_core"] }
+
+#ark-gm17 = { version = "0.4.0", features = [ "r1cs" ], default-features = false }
+ark-gm17 = { git = "https://github.com/arkworks-rs/gm17", features = [ "r1cs" ], default-features = false }
+
+tracing = { version = "0.1", default-features = false, features = [ "attributes" ] }
+rayon = { version = "1", optional = true }
+
+[patch.crates-io]
+ark-crypto-primitives = { path = "crypto-primitives", default-features = false, features = ["snark", "crh", "sponge", "r1cs"] }
+###############################################################################
+
+################################## Features ###################################
+
+[features]
+default = [ "std" ]
+std = [ "ark-ff/std", "ark-ec/std", "ark-std/std", "ark-serialize/std", "ark-nonnative-field/std", "ark-r1cs-std/std", "ark-relations/std", "ark-gm17/std" ]
+parallel = [ "std", "ark-ff/parallel", "ark-ec/parallel", "ark-std/parallel", "rayon" ]
+print-trace = [ "ark-std/print-trace" ]
+
+###############################################################################
+
+# Copied from Zexe
+[profile.release]
+opt-level = 3
+lto = "thin"
+incremental = true
+
+[profile.bench]
+opt-level = 3
+debug = false
+rpath = false
+lto = "thin"
+incremental = true
+debug-assertions = false
+
+[profile.dev]
+opt-level = 0
+
+[profile.test]
+opt-level = 3
+lto = "thin"
+incremental = true
+debug-assertions = true
+debug = true
