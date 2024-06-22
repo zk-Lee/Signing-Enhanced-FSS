@@ -1,5 +1,7 @@
 ## Run
+```
 cargo run --release --example FSSN
+```
 
 ## Acknowledgements
 
