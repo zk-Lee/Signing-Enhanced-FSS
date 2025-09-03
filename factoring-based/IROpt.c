@@ -126,7 +126,7 @@ void generateE(BIGNUM* e, int index)
         while(1) {
                 BN_pseudo_rand_range(e, range);
                 BN_add(e, e, offset);
-                if(BN_is_prime_ex(e, l, ctx, NULL)) break;
+                if(BN_is_prime_ex(e, 0, ctx, NULL)) break; //OpenSSL’s default
         }
 }
 
